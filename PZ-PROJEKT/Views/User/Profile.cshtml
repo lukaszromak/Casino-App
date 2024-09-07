@@ -1,0 +1,29 @@
+﻿@model PZ_PROJEKT.Models.User
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div>
+    <h2>@User?.Identity?.Name</h2>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SteamId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SteamId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Balance)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Balance)
+        </dd>
+    </dl>
+    @{
+        if(ViewBag.BalanceAdded != null)
+        {
+            <p class="text-success">Successfully added @ViewBag.BalanceAdded to your account.</p>
+        }
+    }
+</div>

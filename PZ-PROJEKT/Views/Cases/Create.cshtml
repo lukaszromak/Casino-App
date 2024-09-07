@@ -1,0 +1,61 @@
+﻿@model PZ_PROJEKT.Models.Case
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create your own case</h1>
+<p>The price will be calculated based on items and their chance to drop. Total percentage needs to be 100%</p>
+<hr />
+<div class="row">
+        <div class="form-group">
+            <p>Select items to include in your chest</p>
+            <p id="total-percentage">Total percentage: 0%</p>
+            <div class="row">
+                @foreach(var item in ViewBag.AvailableItems)
+                {
+                    <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+                        <div class="case-item" data-item-id="@item.Id" data-img-src="/images/@item.ImagePath">
+                            <img src="@Url.Content($"/images/{item.ImagePath}")" alt="@item.Name" class="img-thumbnail" />
+                            <p>@item.Name - @item.Price zł</p>
+                        </div>
+                        <span class="d-none percentage-controls" data-item-id="@item.Id">
+                            <input class="percentage-slider" type="range" value="0" min=0 max=100 data-item-id="@item.Id" />
+                            <input class="percentage-input" type="number" value="0" min=0 max=100 data-item-id="@item.Id" />
+                            %
+                        </span>
+                    </div>
+                }
+            </div>
+        </div>
+        <span style="margin-bottom: 1rem" id="items-validation" class="text-danger"></span>
+        <hr />
+        <div class="form-group">
+            <label for="Name" class="control-label">
+                Case name
+            </label>
+            <input id="case-name" for="Name" class="form-control" />
+        </div>
+        <span id="name-validation" class="text-danger"></span>
+        <hr style="margin-top: 1rem"/>
+        <div class="form-group">
+            <input id="create-case-submit" type="submit" value="Create" class="btn btn-primary" />
+        </div>
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AntiForgeryToken" }))
+        {
+            @Html.AntiForgeryToken()
+        }
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/createCase.css" />
+}
+
+@section Scripts {
+    <script src="~/js/createCase.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

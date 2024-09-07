@@ -1,0 +1,78 @@
+﻿@model Case
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container text-center my-5">
+    <h1>@Model.Name</h1>
+
+    <span display="none" id="case-price">@Model.Price</span>
+
+    <div id="spinner-items" class="row g-0 mt-1">
+        <span id="winning-line" class="spinner-helper"></span>
+
+        <div id="spinner-helper-left" class="col spinner-helper"></div>
+
+        @if (Model.CaseItems.Count > 0)
+        {
+            @for (int i = 0; i < 11; i++)
+            {
+                var item = Model.CaseItems[i % Model.CaseItems.Count];
+                var clss = i == 5 ? "col winning-line" : "col";
+                clss += " spinner-item";
+
+                <div class="@clss">
+                    <img src="@Url.Content($"/images/{item.Skin.ImagePath}")" alt="@item.Skin.Name" class="img-thumbnail spinner-item-img" />
+                </div>
+            }
+        }
+        <div id="spinner-helper-right" class="col spinner-helper"></div>
+
+    </div>
+
+    <div class="row text-center">
+        <span id="opened-item-name" class="d-none"></span>
+    </div>
+
+    <div class="row text-center text-danger">
+        <span id="error-message" class="d-none"></span>
+    </div>
+
+    <div class="row mt-4 mb-4">
+
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AntiForgeryToken" }))
+        {
+            @Html.AntiForgeryToken()
+        }
+        <button id="spin-button" class="btn btn-primary">Open</button>
+        <input type="hidden" id="case-id" value="@Model.Id"/>
+
+    </div>
+
+    <div id="items" class="row">
+
+        @foreach (var item in Model.CaseItems)
+        {
+            double chance = (double)@item.Weight / (double)Model.TotalWeight * 100;
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4" data-item-id="@item.Id" data-img-src="/images/@item.Skin.ImagePath">
+                <a asp-controller="Items" asp-action="Details" asp-route-id=@item.Skin.Id>
+                <img src="@Url.Content($"/images/{item.Skin.ImagePath}")" alt="@item.Skin.Name" class="img-thumbnail"/>
+                </a>
+                <a asp-controller="Items" asp-action="Details" asp-route-id=@item.Skin.Id>
+                @item.Skin.Name - @chance %
+                </a>
+            </div>
+        }
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/caseDetails.js"></script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/caseDetails.css" />
+}

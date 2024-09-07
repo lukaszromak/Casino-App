@@ -1,0 +1,33 @@
+﻿.spinner-item {
+    transition: all 0.2s linear;
+}
+
+.spinner-helper {
+    border-left: 1px solid white;
+    background-color: white;
+    z-index: 1000;
+}
+
+span.spinner-helper {
+    border: 1px solid red;
+    position: absolute;
+    left: 50%;
+    width:1px;
+    height:100px;
+    background-color: transparent;
+}
+
+.notransition {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
+}
+
+.w {
+    background-color: lawngreen;
+}
+
+.l {
+    background-color: indianred;
+}

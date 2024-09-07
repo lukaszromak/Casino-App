@@ -1,0 +1,93 @@
+﻿@model IEnumerable<PZ_PROJEKT.Controllers.UserController.Transaction>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <form>
+        <div class="form-check">
+            <input class="form-check-input" name="openedCases" type="checkbox" value="true" id="flexCheckDefault" @ViewBag.OpenedCasesChecked>
+            <label class="form-check-label" for="flexCheckDefault">
+                Opened cases
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" name="soldCases" type="checkbox" value="true" id="flexCheckDefault" @ViewBag.SoldCasesChecked>
+            <label class="form-check-label" for="flexCheckDefault">
+                Sold Cases
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" name="payments" type="checkbox" value="true" id="flexCheckChecked" @ViewBag.PaymentsChecked>
+            <label class="form-check-label" for="flexCheckChecked">
+                Payments
+            </label>
+        </div>
+        <button class="btn btn-primary">Search</button>
+    </form>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentMethod)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Case)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemTransaction)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentMethod)
+                </td>
+                <td>
+                    @{
+                        if(item.Case?.Id != null) {
+                        <a asp-controller="Cases" asp-action="Details" asp-route-id=@item.Case.Id>
+                            @item.Case.Id
+                        </a>
+                        }
+                    }
+                </td>
+                <td>
+                    @{
+                        if (item.ItemTransaction?.Id != null) {
+                        <a asp-controller="ItemTransaction" asp-action="Details" asp-route-id="@item.ItemTransaction.Id">
+                            @item.ItemTransaction.Id
+                        </a>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,145 @@
+﻿@model IPagedList<PZ_PROJEKT.Models.Case>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Fluent;
+
+<link href="/css/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewData["Title"] = "Cases";
+}
+
+<div class="container">
+
+@*     <div class="row text-center">
+        <a asp-action="Create" asp-controller="Cases">CREATE YOUR OWN CASE!</a>
+    </div> *@
+
+    <h1 class="text-center">Cases</h1>
+
+    <form class="no-styles" asp-controller="Cases" asp-action="Index" method="get">
+        <p>
+            Title: <input type="text" name="SearchString" />
+            <input type="submit" value="Search" />
+        </p>
+    </form>
+    Sorting:
+    <form class="no-styles" asp-controller="Cases" asp-action="Index" method="get">
+        <input type="hidden" name="sortOrder" value="@ViewBag.NameSortParam" />
+        <input type="hidden" name="currentFilter" value="@ViewBag.CurrentFilter"/>
+        @{
+            var clss = "btn btn-primary";
+            var text = "name";
+            Console.WriteLine(ViewBag.NameSortParam == null);
+            if (ViewBag.NameSortParam == null)
+            {
+                clss = "btn btn-primary";
+                text = "name descending";
+            }
+            else if (ViewBag.NameSortParam.Equals("name_desc"))
+            {
+                clss = "btn btn-primary";
+                text = "name descending";
+            }
+            else if (ViewBag.NameSortParam.Equals("name_asc"))
+            {
+                clss = "btn btn-danger";
+                text = "name ascending";
+            }
+            else if (ViewBag.NameSortParam.Equals("name_asc") || ViewBag.NameSortParam.Equals(""))
+            {
+                clss = "btn btn-success";
+                text = "clear sort";
+            }
+            <button class="@clss">
+                @text
+            </button>
+        }
+    </form>
+    <form class="no-styles" asp-controller="Cases" asp-action="Index" method="get">
+        <input type="hidden" name="sortOrder" value="@ViewBag.PriceSortParam" />
+        <input type="hidden" name="currentFilter" value="@ViewBag.CurrentFilter"/>
+        @{
+            var clss2 = "btn btn-primary";
+            var text2 = "price";
+            Console.WriteLine(ViewBag.NameSortParam == null);
+            if (ViewBag.PriceSortParam == null)
+            {
+                clss2 = "btn btn-primary";
+                text2 = "price descending";
+            }
+            else if (ViewBag.PriceSortParam.Equals("price_desc"))
+            {
+                clss2 = "btn btn-primary";
+                text2 = "price descending";
+            }
+            else if (ViewBag.PriceSortParam.Equals("price_asc"))
+            {
+                clss2 = "btn btn-danger";
+                text2 = "price ascending";
+            }
+            else if (ViewBag.PriceSortParam.Equals("price_asc") || ViewBag.PriceSortParam.Equals(""))
+            {
+                clss2 = "btn btn-success";
+                text2 = "clear sort";
+            }
+            <button class="@clss2">
+                @text2
+            </button>
+        }
+    </form>
+
+    <div class="row mt-5">
+        @foreach (var caseItem in Model)
+        {
+            <div class="col-md-3 gallery-item">
+                <a asp-action="Details" asp-route-id=@caseItem.Id target="_blank">
+                    <div>
+                        <img src="@Url.Content($"/images/{caseItem.ImagePath}")" alt="@caseItem.Name" class="img-fluid">
+                        <div class="gallery-item-title">@caseItem.Name - $@caseItem.Price</div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+
+    <div class="row justify-content-center">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .gallery-item {
+            margin-bottom: 20px;
+        }
+
+        .gallery-item:hover {
+            transform: scale(0.9);
+            transition-timing-function: ease-in;
+            transition: 0.2s;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        .gallery-item-title {
+            text-align: center;
+            font-size: 1.25rem; /* Adjust size as needed */
+            font-weight: bold; /* Makes title bold */
+            margin-top: 10px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+}

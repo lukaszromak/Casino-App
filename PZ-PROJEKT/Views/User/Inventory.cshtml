@@ -1,0 +1,43 @@
+﻿@model IEnumerable<PZ_PROJEKT.Models.Inventory>
+
+@{
+    ViewData["Title"] = "Inventory";
+}
+
+<h1>Inventory</h1>
+
+@{
+    float sum = 0;
+    @foreach (var item in Model)
+    {
+        sum += item.Item.Price * item.Count;
+    }
+    <h2>Total value @sum</h2>
+}
+
+<div class="row">
+    <span id="error-message" class="d-none"></span>
+</div>
+<button id="sell-selected" class="btn btn-success">Sell selected items</button>
+<button id="select-all" class="btn btn-primary">Select all items</button>
+<span class="">Total price of selected items: <span id="selected-sum">0</span></span>
+
+<div class="row mt-5">
+    @foreach (var item in Model)
+    {
+        for (int i = 0; i < item.Count; i++) {
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4 item" data-item-id="@item.Id">
+                <img src="/images/@item.Item.ImagePath" alt="@item.Item.Name" class="img-thumbnail"/>
+                @item.Item.Name - @item.Item.Price
+            </div>
+        }
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/inventory.js"></script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/inventory.css"~ />
+}
